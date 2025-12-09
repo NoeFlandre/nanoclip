@@ -1,7 +1,7 @@
 import torch
 from torch import nn
-from nano_clip.config import config
-from nano_clip.utils import Block
+from ..config import Config
+from ..utils import Block
 
 class TextTransformer(nn.Module):
     def __init__(self, cfg : Config):

@@ -1,8 +1,8 @@
 import torch
 from torch import nn
-from nano_clip.config import Config
-from nano_clip.model.text import TextTransformer
-from nano_clip.model.vision import VisionTransformer
+from ..config import Config
+from .text import TextTransformer
+from .vision import VisionTransformer
 import torch.nn.functional as F
 
 class CLIP(nn.Module):
