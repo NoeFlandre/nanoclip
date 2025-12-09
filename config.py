@@ -15,8 +15,13 @@ class Config:
     text_width : int = 256
     text_layers : int = 8
     text_heads : int = 4
+    max_length : int = 77
+    text_layer_norm_eps : int = 1e-6
 
-    # 3) Training Parameters
+    # 3) Shared Parameters
+    shared_dim = 512
+
+    # 4) Training Parameters
     batch_size : int = 512
     learning_rate : float : 1e-3
     epochs : int = 30
