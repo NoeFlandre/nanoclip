@@ -1,7 +1,7 @@
 import torch
 from torch import nn
-from ..config import Config
-from ..utils import Block
+from config import Config
+from utils import Block
 
 class TextTransformer(nn.Module):
     def __init__(self, cfg : Config):

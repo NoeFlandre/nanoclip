@@ -1,7 +1,7 @@
 import torch
 from torch import nn
-from ..config import Config
-from ..utils import Block
+from config import Config
+from utils import Block
 
 class PatchEmbedding(nn.Module):
 
@@ -43,7 +43,7 @@ class VisionTransformer(nn.Module):
         self.cls_token = nn.Parameter(torch.zeros((1,1,cfg.vision_width))) # the classification token which we initialized as zeros
         self.positional_embedding = nn.Parameter(torch.randn(1, (cfg.image_size // cfg.patch_size)**2 +1, cfg.vision_width)) # the positional embeddings which is initialized at random
         self.final_layer_norm = nn.LayerNorm(cfg.vision_width, eps=cfg.vision_layer_norm_eps) # the final layer normalization which comes after the very end of the block layers
-        self.blocks = nn.ModuleList([Block(embed_dim=cfg.vision_width, eps=cfg.vision_layer_norm_eps) for _ in range(cfg.vision_layers)]) # the different layers of blocks
+        self.blocks = nn.ModuleList([Block(embed_dim=cfg.vision_width, eps=cfg.vision_layer_norm_eps, num_heads=cfg.vision_heads) for _ in range(cfg.vision_layers)]) # the different layers of blocks
 
     def forward(self, x):
         B = x.shape[0] # we retrieve the batch size
