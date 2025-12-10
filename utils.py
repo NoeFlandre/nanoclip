@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import torch.nn.functional as F
 
 class Attention(nn.Module):
     def __init__(self, embed_dim, num_heads):
@@ -25,14 +26,20 @@ class Attention(nn.Module):
         k = k.reshape(B,N,self.num_heads, self.head_dim) # [batch_size, num_patches, num_heads, head_dim]
         k = k.transpose(1,2) # [batch_size, num_heads, num_patches, head_dim]
 
-        attn_scores = torch.matmul(q, k.transpose(2,3)) # [batch_size, num_heads, num_patches, num_patches]
-        attn_scores = attn_scores / self.head_dim**0.5 # [batch_size, num_heads, num_patches, num_patches]
-        attn_scores = torch.softmax(attn_scores, dim=-1) # [batch_size, num_heads, num_patches, num_patches]
-
         v = self.v_proj(x) # [batch_size, num_patches, embed_dim]
         v = v.reshape(B,N,self.num_heads, self.head_dim) # [batch_size, num_patches, num_heads, head_dim]
         v = v.transpose(1,2) # [batch_size, num_heads, num_patches, head_dim]
-        output = torch.matmul(attn_scores, v) # [batch_size, num_heads, num_patches, head_dim]
+
+        # ============ MANUAL ATTENTION IMPLEMENTATION (commented for reference) ============
+        # attn_scores = torch.matmul(q, k.transpose(2,3)) # [batch_size, num_heads, num_patches, num_patches]
+        # attn_scores = attn_scores / self.head_dim**0.5 # [batch_size, num_heads, num_patches, num_patches]
+        # attn_scores = torch.softmax(attn_scores, dim=-1) # [batch_size, num_heads, num_patches, num_patches]
+        # output = torch.matmul(attn_scores, v) # [batch_size, num_heads, num_patches, head_dim]
+        # ===================================================================================
+
+        # OPTIMIZED: Using PyTorch's scaled_dot_product_attention (Flash Attention)
+        output = F.scaled_dot_product_attention(q, k, v)
+
         output = output.transpose(1,2) # [batch_size, num_patches, num_heads, head_dim]
         output = output.flatten(2) # [batch_size, num_patches, embed_dim]
         output = self.out_proj(output) # [batch_size, num_patches, embed_dim]

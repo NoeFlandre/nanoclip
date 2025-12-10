@@ -17,7 +17,8 @@ class CLIP(nn.Module):
 
     def forward(self, image, text):
         N = image.shape[0]
-        labels = torch.arange(N)
+        device = image.device
+        labels = torch.arange(N).to(device)
         image_features = self.vision_encoder(image) # [batch_size, vision_width]
         image_features = self.vision_proj(image_features) # [batch_size, shared_dim]
         text_features = self.text_encoder(text) # [batch_size, text_width]
