@@ -7,8 +7,16 @@ from config import Config
 from torchvision import transforms
 from debug_dataset import CIFAR10CLIPDataset
 import time
+import os 
 
 def main():
+
+    log_dir = os.path.join(os.path.dirname(__file__), "..", "logs")
+    os.makedirs(log_dir, exist_ok=True)
+    log_file = os.path.join(log_dir, "logs.txt")
+    with open(log_file, "w") as f:
+        pass
+    
     cfg = Config()
 
     if torch.cuda.is_available():
@@ -17,8 +25,10 @@ def main():
         device = "mps"
     else :
         device = "cpu"
-    
+
     print(f"Device : {device}")
+    with open(log_file, "a") as f:
+        f.write(f"Device : {device}\n")    
 
     tokenizer = CLIPTokenizer()
     model = CLIP(cfg).to(device)
@@ -37,6 +47,8 @@ def main():
 
     dataloader = DataLoader(dataset=dataset, batch_size=cfg.batch_size, shuffle=True)
     print(f"Training samples {len(dataloader.dataset)}")
+    with open(log_file, "a") as f:
+        f.write(f"Training samples {len(dataloader.dataset)}\n")
 
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=0.001)
 
@@ -62,8 +74,10 @@ def main():
                 t1 = time.time()
                 dt = (t1-t0)*1000 #ms
                 print(f"Batch : {batch} / {len(dataloader)} | Time {dt:.0f} ms | Train Loss : {train_loss_value:.4f} | Grad Norm : {norm:.4f}")
-
+                with open(log_file, "a") as f:
+                    f.write(f"Batch : {batch} / {len(dataloader)} | Time {dt:.0f} ms | Train Loss : {train_loss_value:.4f} | Grad Norm : {norm:.4f}\n")
         print(f"Epoch : {epoch} | Training Loss : {train_loss_values[-1]:.4f} ")
-
+        with open(log_file, "a") as f:
+            f.write(f"Epoch : {epoch} | Training Loss : {train_loss_values[-1]:.4f}\n ")
 if __name__ == "__main__":
         main()

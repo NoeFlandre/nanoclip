@@ -1,0 +1,25 @@
+Device : mps
+Training samples 50000
+Batch : 0 / 25000 | Time 1164 ms | Train Loss : 0.6932 | Grad Norm : 0.0076
+Batch : 1 / 25000 | Time 117 ms | Train Loss : 0.7256 | Grad Norm : 1.0749
+Batch : 2 / 25000 | Time 93 ms | Train Loss : 0.6934 | Grad Norm : 0.0103
+Batch : 3 / 25000 | Time 95 ms | Train Loss : 0.6931 | Grad Norm : 0.0010
+Batch : 4 / 25000 | Time 82 ms | Train Loss : 0.6945 | Grad Norm : 0.0296
+Epoch : 0 | Training Loss : 0.6945
+ Batch : 0 / 25000 | Time 860 ms | Train Loss : 0.6931 | Grad Norm : 0.0015
+Batch : 1 / 25000 | Time 83 ms | Train Loss : 0.6931 | Grad Norm : 0.0004
+Batch : 2 / 25000 | Time 84 ms | Train Loss : 0.6932 | Grad Norm : 0.0020
+Batch : 3 / 25000 | Time 81 ms | Train Loss : 0.6942 | Grad Norm : 0.0130
+Batch : 4 / 25000 | Time 82 ms | Train Loss : 0.6932 | Grad Norm : 0.0004
+Epoch : 1 | Training Loss : 0.6932
+ Batch : 0 / 25000 | Time 755 ms | Train Loss : 0.6933 | Grad Norm : 0.0021
+Batch : 1 / 25000 | Time 86 ms | Train Loss : 0.6932 | Grad Norm : 0.0003
+Batch : 2 / 25000 | Time 90 ms | Train Loss : 0.6932 | Grad Norm : 0.0013
+Batch : 3 / 25000 | Time 103 ms | Train Loss : 0.6931 | Grad Norm : 0.0001
+Batch : 4 / 25000 | Time 103 ms | Train Loss : 0.6933 | Grad Norm : 0.0018
+Epoch : 2 | Training Loss : 0.6933
+ Batch : 0 / 25000 | Time 585 ms | Train Loss : 0.6932 | Grad Norm : 0.0002
+Batch : 1 / 25000 | Time 82 ms | Train Loss : 0.6931 | Grad Norm : 0.0004
+Batch : 2 / 25000 | Time 84 ms | Train Loss : 0.6932 | Grad Norm : 0.0002
+Batch : 3 / 25000 | Time 84 ms | Train Loss : 0.6931 | Grad Norm : 0.0001
+Batch : 4 / 25000 | Time 83 ms | Train Loss : 0.6932 | Grad Norm : 0.0004
