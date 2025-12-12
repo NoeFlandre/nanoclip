@@ -8,4 +8,4 @@
 - **Contrastive Learning:** Implements the core CLIP training objective to align image and text embeddings.
 - **Configurable:** Parameters for both vision and text models are easily adjustable via `config.py`.
 
-
+Currently the project is in development, only one toy training run has been done on a remote 1xRTX 3600 on CIFAR10. More to come..
