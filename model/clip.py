@@ -10,7 +10,9 @@ class CLIP(nn.Module):
         super().__init__()
         self.vision_encoder = VisionTransformer(cfg)
         self.text_encoder = TextTransformer(cfg)
-        self.temperature = nn.Parameter(torch.ones([])*torch.log(torch.tensor(1/0.07)))
+        # Initialize temperature to log(1/0.07) ≈ 2.66 following CLIP paper
+        # This means exp(temperature) ≈ 14.3, which properly scales similarity scores
+        self.temperature = nn.Parameter(torch.tensor(2.6593))
         self.vision_proj = nn.Linear(in_features=cfg.vision_width, out_features=cfg.shared_dim)
         self.text_proj = nn.Linear(in_features=cfg.text_width, out_features=cfg.shared_dim)
         self.loss_fn = nn.CrossEntropyLoss()

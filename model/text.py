@@ -10,8 +10,8 @@ class TextTransformer(nn.Module):
         self.vocab_size = cfg.vocab_size
         self.text_width = cfg.text_width
         self.token_embedding = nn.Embedding(self.vocab_size, self.text_width)
-        self.positional_embedding = nn.Parameter(torch.randn(1, self.max_length+1, self.text_width)) # [batch_size, max_length, text_width]
-        self.cls_token = nn.Parameter(torch.zeros(1, 1, self.text_width))
+        self.positional_embedding = nn.Parameter(torch.randn(1, self.max_length+1, self.text_width)*0.02) # [batch_size, max_length, text_width]
+        self.cls_token = nn.Parameter(torch.randn(1, 1, self.text_width)*0.02) # 0.02 : smaller std for stability
         self.blocks = nn.ModuleList([Block(embed_dim=self.text_width, eps=cfg.text_layer_norm_eps, num_heads=cfg.text_heads) for _ in range(cfg.text_layers)])
         self.final_layer_norm = nn.LayerNorm(cfg.text_width, eps=cfg.text_layer_norm_eps)
 

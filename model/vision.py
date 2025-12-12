@@ -40,8 +40,8 @@ class VisionTransformer(nn.Module):
     def __init__(self, cfg : Config):
         super().__init__() # call the parent class's __init__
         self.patch_embed = PatchEmbedding(cfg) # the embeddings for our batch
-        self.cls_token = nn.Parameter(torch.zeros((1,1,cfg.vision_width))) # the classification token which we initialized as zeros
-        self.positional_embedding = nn.Parameter(torch.randn(1, (cfg.image_size // cfg.patch_size)**2 +1, cfg.vision_width)) # the positional embeddings which is initialized at random
+        self.cls_token = nn.Parameter(torch.randn((1,1,cfg.vision_width)) * 0.02) # cls token with smaller std for stability
+        self.positional_embedding = nn.Parameter(torch.randn(1, (cfg.image_size // cfg.patch_size)**2 +1, cfg.vision_width) * 0.02) # positional embeddings with smaller std for stability
         self.final_layer_norm = nn.LayerNorm(cfg.vision_width, eps=cfg.vision_layer_norm_eps) # the final layer normalization which comes after the very end of the block layers
         self.blocks = nn.ModuleList([Block(embed_dim=cfg.vision_width, eps=cfg.vision_layer_norm_eps, num_heads=cfg.vision_heads) for _ in range(cfg.vision_layers)]) # the different layers of blocks
 
