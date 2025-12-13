@@ -80,3 +80,30 @@ class Block(nn.Module):
         x = x + residual
         return x
 
+class ZeroShotEvaluator:
+    def __init__(self, model, tokenizer, class_names, device):
+        self.model = model
+        self.device = device
+        self.tokenizer=tokenizer
+        self.class_names = class_names
+        self.prompts = [f"a photo of a {cls}" for cls in class_names]
+        self.tokens = [tokenizer(text) for text in self.prompts]
+        self.tokens_batch = torch.stack(self.tokens).to(device)
+        with torch.no_grad():
+            self.text_features = self.model.encode_text(self.tokens_batch)
+
+    def evaluate(self, dataloader):
+        self.model.eval()
+        correct, total = 0, 0
+
+        with torch.no_grad():
+            for images, labels in dataloader:
+                images, labels = images.to(self.device), labels.to(self.device)
+                image_features = self.model.encode_image(images)
+                similarity = image_features@self.text_features.T 
+                predictions = torch.argmax(similarity, dim=1)
+                correct += (predictions == labels).sum().item()
+                total += labels.size(0)
+
+        accuracy = correct / total
+        return accuracy

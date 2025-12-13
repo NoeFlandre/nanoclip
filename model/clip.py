@@ -32,3 +32,17 @@ class CLIP(nn.Module):
         loss_I = self.loss_fn(similarity, labels)
         average_loss = (loss_T + loss_I) / 2
         return similarity, average_loss
+    
+    def encode_image(self, image):
+        # Return normalized image features in shared_dim space
+        image_features = self.vision_encoder(image) # [batch_size, vision_width]
+        image_features = self.vision_proj(image_features) # [batch_size, shared_dim]
+        image_features = F.normalize(image_features, dim=-1)
+        return image_features
+
+    def encode_text(self, text):
+        # Return normalized text features in shared dim space
+        text_features = self.text_encoder(text) # [batch_size, text_width]
+        text_features = self.text_proj(text_features) # [batch_size, shared_dim]
+        text_features = F.normalize(text_features, dim=-1)
+        return text_features

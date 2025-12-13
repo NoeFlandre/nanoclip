@@ -8,6 +8,8 @@ from torchvision import transforms
 from debug_dataset import CIFAR10CLIPDataset
 import time
 import os 
+from utils import ZeroShotEvaluator
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 def main():
 
@@ -32,24 +34,40 @@ def main():
 
     tokenizer = CLIPTokenizer()
     model = CLIP(cfg).to(device)
-    model = torch.compile(model)
+    if device == "cuda":
+        model = torch.compile(model)
 
     transform_pipeline = transforms.Compose([
         transforms.Resize((224,224)),
         transforms.ToTensor(),
     ])
 
-    dataset = CIFAR10CLIPDataset(
+    train_dataset = CIFAR10CLIPDataset(
         transform=transform_pipeline,
         tokenizer=tokenizer,
         root="data",
         train=True
     )
 
-    dataloader = DataLoader(dataset=dataset, batch_size=cfg.batch_size, shuffle=True, num_workers=os.cpu_count(), pin_memory=True)
-    print(f"Training samples {len(dataloader.dataset)}")
+    test_dataset = CIFAR10CLIPDataset(
+        transform = transform_pipeline,
+        tokenizer=tokenizer,
+        root="data",
+        train=False,
+        return_labels=True
+    )
+
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size=cfg.batch_size, shuffle=True, num_workers=os.cpu_count(), pin_memory=True)
+    test_dataloader = DataLoader(dataset=test_dataset, batch_size=cfg.batch_size, shuffle=False, num_workers=os.cpu_count(), pin_memory=True)
+
+    CIFAR10_CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 
+                   'dog', 'frog', 'horse', 'ship', 'truck']
+    
+    evaluator = ZeroShotEvaluator(model, tokenizer, CIFAR10_CLASSES, device)
+
+    print(f"Training samples {len(train_dataloader.dataset)}")
     with open(log_file, "a") as f:
-        f.write(f"Training samples {len(dataloader.dataset)}\n")
+        f.write(f"Training samples {len(train_dataloader.dataset)}\n")
 
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=cfg.learning_rate)
 
@@ -57,7 +75,12 @@ def main():
 
     for epoch in range(cfg.epochs):
         model.train()
-        for batch, (X, Y) in enumerate(dataloader):
+       # max_batch = 5
+       # count = 0
+        for batch, (X, Y) in enumerate(train_dataloader):
+           # count+=1
+           # if count > max_batch :
+           #     break
             t0 = time.time()
             X, Y = X.to(device), Y.to(device)
             similarity, train_loss = model(image=X, text=Y)
@@ -72,10 +95,12 @@ def main():
             optimizer.step()
             t1 = time.time()
             dt = (t1-t0)*1000 #ms
-            print(f"Batch : {batch} / {len(dataloader)} | Time {dt:.0f} ms | Train Loss : {train_loss_value:.4f} | Grad Norm : {norm:.4f}")
+            print(f"Batch : {batch} / {len(train_dataloader)} | Time {dt:.0f} ms | Train Loss : {train_loss_value:.4f} | Grad Norm : {norm:.4f}")
             with open(log_file, "a") as f:
-                f.write(f"Batch : {batch} / {len(dataloader)} | Time {dt:.0f} ms | Train Loss : {train_loss_value:.4f} | Grad Norm : {norm:.4f}\n")
-        print(f"Epoch : {epoch} | Training Loss : {train_loss_values[-1]:.4f} ")
+                f.write(f"Batch : {batch} / {len(train_dataloader)} | Time {dt:.0f} ms | Train Loss : {train_loss_value:.4f} | Grad Norm : {norm:.4f}\n")
+        accuracy = evaluator.evaluate(test_dataloader)
+        model.train()
+        print(f"Epoch : {epoch} | Training Loss : {train_loss_values[-1]:.4f} | Accuracy on test set : {accuracy:.4f} ")
         with open(log_file, "a") as f:
             f.write(f"Epoch : {epoch} | Training Loss : {train_loss_values[-1]:.4f}\n ")
 if __name__ == "__main__":
