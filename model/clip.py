@@ -15,7 +15,8 @@ class CLIP(nn.Module):
         self.temperature = nn.Parameter(torch.tensor(2.6593))
         self.vision_proj = nn.Linear(in_features=cfg.vision_width, out_features=cfg.shared_dim)
         self.text_proj = nn.Linear(in_features=cfg.text_width, out_features=cfg.shared_dim)
-        self.loss_fn = nn.CrossEntropyLoss()
+        if cfg.loss_type == "contrastive":
+            self.loss_fn = nn.CrossEntropyLoss()
 
     def forward(self, image, text):
         N = image.shape[0]

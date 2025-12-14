@@ -107,3 +107,10 @@ class ZeroShotEvaluator:
 
         accuracy = correct / total
         return accuracy
+
+def count_parameters(model):
+    total = 0
+    for param in model.parameters():
+        if param.requires_grad:
+            total+=param.numel()
+    return total

@@ -1,9 +1,0 @@
-Device : mps
-Training samples 50000
-Batch : 0 / 1563 | Time 6212 ms | Train Loss : 3.4667 | Grad Norm : 0.2893
-Batch : 1 / 1563 | Time 512 ms | Train Loss : 3.5259 | Grad Norm : 4.0575
-Batch : 2 / 1563 | Time 449 ms | Train Loss : 3.4817 | Grad Norm : 0.4546
-Batch : 3 / 1563 | Time 451 ms | Train Loss : 3.4662 | Grad Norm : 0.0243
-Batch : 4 / 1563 | Time 452 ms | Train Loss : 3.4668 | Grad Norm : 0.0375
-Epoch : 0 | Training Loss : 3.4668
- 

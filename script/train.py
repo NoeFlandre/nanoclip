@@ -8,7 +8,7 @@ from torchvision import transforms
 from debug_dataset import CIFAR10CLIPDataset
 import time
 import os 
-from utils import ZeroShotEvaluator
+from utils import ZeroShotEvaluator, count_parameters
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 def main():
@@ -28,15 +28,14 @@ def main():
     else :
         device = "cpu"
 
-    print(f"Device : {device}")
-    with open(log_file, "a") as f:
-        f.write(f"Device : {device}\n")    
-
     tokenizer = CLIPTokenizer()
     model = CLIP(cfg).to(device)
     if device == "cuda":
         model = torch.compile(model)
 
+    
+
+    
     transform_pipeline = transforms.Compose([
         transforms.Resize((224,224)),
         transforms.ToTensor(),
@@ -72,6 +71,14 @@ def main():
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=cfg.learning_rate)
 
     train_loss_values = []
+
+    print(f"Device : {device}")
+    with open(log_file, "a") as f:
+        f.write(f"Device : {device}\n")
+        f.write(f"Total number of trainable parameters : {count_parameters(model)}\n")
+        for key, value in vars(cfg).items():
+            f.write(f"{key} : {value}\n")
+        f.write(f"Optimizer : {type(optimizer).__name__}\n")
 
     for epoch in range(cfg.epochs):
         model.train()

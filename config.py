@@ -23,6 +23,7 @@ class Config:
     shared_dim : int = 512 # this is the dimension of the common shared space between text and space
 
     # 4) Training Parameters
-    batch_size : int = 32 # size of our batch
+    batch_size : int = 2 # size of our batch
     learning_rate : float = 3e-4 # learning rate
-    epochs : int = 3 # epochs
+    epochs : int = 5 # epochs
+    loss_type : str = "contrastive"
