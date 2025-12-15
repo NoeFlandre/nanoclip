@@ -9,3 +9,7 @@
 - **Configurable:** Parameters for both vision and text models are easily adjustable via `config.py`.
 
 Currently the project is in development, only one toy training run has been done on a remote 1xRTX 3600 on CIFAR10. More to come..
+
+## Training Plots:
+![Accuracy](logs/logs2/accuracy.png)
+![Loss](logs/logs2/loss.png)
