@@ -23,7 +23,9 @@ class Config:
     shared_dim : int = 512 # this is the dimension of the common shared space between text and space
 
     # 4) Training Parameters
-    batch_size : int = 2 # size of our batch
-    learning_rate : float = 3e-4 # learning rate
-    epochs : int = 5 # epochs
+    batch_size : int = 256 # size of our batch (fits well in 12GB VRAM)
+    learning_rate : float = 1e-4 # learning rate (2x original, safer with warmup + clipping)
+    epochs : int = 10 # more epochs to see convergence
     loss_type : str = "contrastive"
+    gradient_clipping = True
+    warmup_steps_percentage = 0.10 # 10% warmup for smoother start

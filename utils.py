@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
+import numpy as np
 
 class Attention(nn.Module):
     def __init__(self, embed_dim, num_heads):
@@ -114,3 +115,17 @@ def count_parameters(model):
         if param.requires_grad:
             total+=param.numel()
     return total
+
+def learning_rate_scheduler(current_step, warmup_steps, total_steps):
+    """ 
+    Returns a multiplier between O and 1
+    """
+
+    # Warmup phase
+    if current_step < warmup_steps :
+        multiplier = current_step / warmup_steps
+    
+    else :
+        multiplier = 0.5 * (1 + np.cos(np.pi*(current_step-warmup_steps)/(total_steps-warmup_steps)))
+
+    return multiplier
