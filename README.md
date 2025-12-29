@@ -1,3 +1,9 @@
+
+## 🚫 Vibe Coding Disclaimer
+
+**Disclaimer**  
+This repository was **not** created using “vibe coding.”
+
 # nanoclip
 
 `nanoclip` is a minimalist, nano-scale implementation of the Contrastive Language-Image Pre-training (CLIP) model, built using PyTorch. This project aims to provide a clear and concise example of how to implement a dual-encoder model that learns to embed images and text into a shared, multimodal latent space.
@@ -14,7 +20,3 @@ Currently the project is in development, only one toy training run has been done
 ![Accuracy](logs/logs2/accuracy.png)
 ![Loss](logs/logs2/loss.png)
 
-## 🚫 Vibe Coding Disclaimer
-
-**Disclaimer**  
-This repository was **not** created using “vibe coding.”
