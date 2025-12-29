@@ -13,3 +13,8 @@ Currently the project is in development, only one toy training run has been done
 ## Training Plots:
 ![Accuracy](logs/logs2/accuracy.png)
 ![Loss](logs/logs2/loss.png)
+
+## 🚫 Vibe Coding Disclaimer
+
+**Disclaimer**  
+This repository was **not** created using “vibe coding.”
