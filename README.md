@@ -1,5 +1,5 @@
 
-![nanoclip logo](ASII Art Text.png)
+![nanoclip logo](ASCII Art Text.png)
 
 
 ## 🚫 Vibe Coding Disclaimer
